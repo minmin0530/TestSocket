@@ -64,14 +64,14 @@ class ViewController: UIViewController {
             if let msg = data[0] as? String {
                 print("receive: " + msg)
                 
-                CFRunLoopStop(rl)
+       //         CFRunLoopStop(rl)
                 self.label.text = msg
             }
         }
         
         socket.connect()
         
-        CFRunLoopRun()
+  //      CFRunLoopRun()
         //            }
         //        }
 
