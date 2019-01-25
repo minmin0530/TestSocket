@@ -10,6 +10,8 @@ import UIKit
 import SocketIO
 
 class ViewController: UIViewController {
+    var manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.forceWebsockets(true)])
+    var socket: SocketIOClient! //= self.manager.defaultSocket
 
     @IBOutlet var label: UILabel!
     @IBOutlet weak var textLabel: UITextField!
@@ -22,14 +24,18 @@ class ViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        socket = self.manager.defaultSocket
         test()
     }
 
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//        test()
+//    }
+    
     func test() {
         let rl :CFRunLoop = CFRunLoopGetCurrent();
-        let manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.forceWebsockets(true)])
-        let socket = manager.defaultSocket
         
         //        DispatchQueue.global(qos: .userInteractive).async {
         //
@@ -40,13 +46,15 @@ class ViewController: UIViewController {
             print("send message")
             if self.sendFlag == true {
                 self.sendFlag = false
-                socket.connect()
-                
-                socket.emit("from_client", self.textLabel.text!)
+                self.socket.connect()
+
+//                CFRunLoopStop(rl)
+
+                self.socket.emit("from_client", self.textLabel.text!)
 //                CFRunLoopRun()
                 
             } else {
-                socket.emit("from_client", "Hello")
+                self.socket.emit("from_client", "Hello")
             }
         }
         socket.on("from_server") { data, ack in
