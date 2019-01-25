@@ -36,7 +36,10 @@ class ViewController: UIViewController {
     
     func test() {
         let rl :CFRunLoop = CFRunLoopGetCurrent();
-        
+        if sendFlag == true {
+            manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.forceWebsockets(true)])
+            socket = self.manager.defaultSocket
+        }
         //        DispatchQueue.global(qos: .userInteractive).async {
         //
         //            DispatchQueue.main.async {
